@@ -11,18 +11,26 @@ const usersRoute = express.Router();
 usersRoute.post(
   '/register',
   asynHandler(async (req, res) => {
-    const { name, email, password } = req.body;
+    const { fullname, username, phonenumber, email, gender, profession, password } = req.body;
 
     const userExists = await User.findOne({ email: email });
     if (userExists) {
       throw new Error('User Exist');
     }
-    const userCreated = await User.create({ email, name, password });
+    const phonenumberExists = await User.findOne({ phonenumber: phonenumber });
+    if (userExists) {
+      throw new Error('User Exist');
+    }
+    const userCreated = await User.create({ fullname, username, phonenumber, email, gender, profession, password });
     res.json({
       _id: userCreated._id,
-      name: userCreated.name,
+      fullname: userCreated.fullname,
+      username: userCreated.username,
+      phonenumber: userCreated.phonenumber,
+      email: userCreated.email,
+      gender: userCreated.gender,
+      profession: userCreated.profession,
       password: userCreated.password,
-      email: userCreated.password,
       token: generateToken(userCreated._id),
     });
   })
@@ -42,9 +50,13 @@ usersRoute.post(
 
       res.json({
         _id: user._id,
-        name: user.name,
+        fullnam: user.fullname,
+        username: user.username,
+        phonenumber: user.phonenumber,
+        email: user.email,
+        gender: user.gender,
+        profession: user.profession,
         password: user.password,
-        email: user.password,
         token: generateToken(user._id),
       });
     } else {
