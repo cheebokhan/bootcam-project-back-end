@@ -3,6 +3,7 @@ const app = express();
 const error=require("./src/middlewares/errorHandlerMiddleware");
 const BookRouter=require("./src/Routes/BookRoute");
 const dotenv = require('dotenv');
+const UserRoute=require('./src/Routes/usersRoute');
 const ConnectDb=require("./src/config/dbConnect");
 
 dotenv.config();
@@ -16,11 +17,13 @@ app.use(express.json());
 //Books
 app.use('/api/books', BookRouter);
 
+app.use('/api/users',UserRoute);
+
 //Error handler middleware
 app.use(error.errorHandlerMiddleware);
 
 //Server
-const PORT = 4000;
+const PORT =  process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server is up and runing ${PORT}`);
 });
