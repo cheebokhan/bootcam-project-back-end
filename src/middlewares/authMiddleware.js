@@ -1,6 +1,6 @@
 const asynHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const User = require('../Model/User');
 
 const authMiddleware = asynHandler(async (req, res, next) => {
   let token;
@@ -18,6 +18,10 @@ const authMiddleware = asynHandler(async (req, res, next) => {
       res.status(401);
       throw new Error('Not authorised, invalid token');
     }
+  }
+  if(!token){
+    res.status(401);
+    throw new Error("not suthorised, no token found");
   }
 });
 
