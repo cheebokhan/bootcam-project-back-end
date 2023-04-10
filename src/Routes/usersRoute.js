@@ -42,7 +42,6 @@ usersRoute.post(
 usersRoute.post(
   '/login',
   asynHandler(async (req, res) => {
-
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
