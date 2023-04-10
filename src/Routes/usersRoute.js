@@ -11,7 +11,7 @@ const usersRoute = express.Router();
 usersRoute.post(
   '/register',
   asynHandler(async (req, res) => {
-    const { fullname, username, phonenumber, email, gender, profession, password } = req.body;
+    const { fullname, username, email, password,phonenumber, gender, profession } = req.body;
 
     const userExists = await User.findOne({ email: email });
     if (userExists) {
@@ -21,18 +21,20 @@ usersRoute.post(
     if (userExists) {
       throw new Error('User Exist');
     }
-    const userCreated = await User.create({ fullname, username, phonenumber, email, gender, profession, password });
+    const userCreated = await User.create({ fullname, username, email,password, phonenumber, gender, profession });
     res.json({
       _id: userCreated._id,
       fullname: userCreated.fullname,
       username: userCreated.username,
-      phonenumber: userCreated.phonenumber,
       email: userCreated.email,
+      password: userCreated.password,
+      phonenumber: userCreated.phonenumber,
       gender: userCreated.gender,
       profession: userCreated.profession,
-      password: userCreated.password,
+     
       token: generateToken(userCreated._id),
     });
+    console.log("data here");
   })
 );
 
@@ -47,6 +49,7 @@ usersRoute.post(
     if (user && (await user.isPasswordMatch(password))) {
       //set status code
       res.status(200);
+      console.log("hereh");
 
       res.json({
         _id: user._id,

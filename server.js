@@ -4,6 +4,7 @@ const error=require("./src/middlewares/errorHandlerMiddleware");
 const BookRouter=require("./src/Routes/BookRoute");
 const usersRoute=require('./src/Routes/usersRoute');
 const dotenv = require('dotenv');
+const UserRoute=require('./src/Routes/usersRoute');
 const ConnectDb=require("./src/config/dbConnect");
 
 dotenv.config();
@@ -17,7 +18,7 @@ app.use(express.json());
 //Books
 app.use('/api/books', BookRouter);
 
-app.use('/api/users', usersRoute);
+app.use('/api/users',UserRoute);
 
 //Error handler middleware
 app.use(error.errorHandlerMiddleware);
