@@ -1,6 +1,8 @@
 const express = require('express');
 const expressAsyncHandler = require('express-async-handler');
 const Book = require("../Model/BookModel");
+const authMiddleware=require("../middlewares/authMiddleware");
+const BookShelf=require("../Model/BookShelfModel");
 
 const BookRouter = express.Router();
 
@@ -11,10 +13,11 @@ BookRouter.get(
     '/',
     expressAsyncHandler(async (req, res) => {
       const book = await Book.find({});
-  
+      const bookShelf = await BookShelf.find({});
+      
       if (book) {
         res.status(200);
-        res.json(book);
+        res.json({book,bookShelf});
       } else {
         res.status(500);
         throw new Error('There are no books');
@@ -26,6 +29,7 @@ BookRouter.get(
 BookRouter.post(
   '/',
   expressAsyncHandler(async (req, res) => {
+    debugger;
     const book = await Book.create(req.body);
 
     if (book) {
@@ -38,9 +42,27 @@ BookRouter.post(
   })
 );
 
+BookRouter.post('/addtoshelf',expressAsyncHandler(async (req, res) => {
+// debugger;
+  let bookshelf = await BookShelf.findOne({bookid: req.body._id ,userid: req.body.userid} );
+  const {startreading,_id,userid} = req.body;
+  
+    if(startreading)
+    bookshelf=  await BookShelf.create({bookid:_id,userid:userid});
+    else
+    {
+      if(bookshelf)
+         await BookShelf.findByIdAndDelete(bookshelf._id);
+    }
+    res.status(200);
+    res.json(bookshelf);
+})
+)
+
 //get book by id for updating 
 BookRouter.put(
   '/:id',
+  authMiddleware,
   expressAsyncHandler(async (req, res) => {
     const book = await Book.findById(req.params.id);
 

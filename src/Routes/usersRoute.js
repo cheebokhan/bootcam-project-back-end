@@ -1,7 +1,7 @@
 const express = require('express');
 const expressAsyncHandler = require('express-async-handler');
 const asynHandler = require('express-async-handler');
-const authMiddleware = require('../middlewares/authMiddleware.js');
+const authMiddleware = require('../middlewares/authMiddleware');
 const User=require('../Model/User.js');
 const generateToken = require('../utils/generateToken');
 
@@ -11,30 +11,40 @@ const usersRoute = express.Router();
 usersRoute.post(
   '/register',
   asynHandler(async (req, res) => {
-    const { fullname, username, email, password,phonenumber, gender, profession } = req.body;
-
-    const userExists = await User.findOne({ email: email });
-    if (userExists) {
-      throw new Error('User Exist');
-    }
-    const phonenumberExists = await User.findOne({ phonenumber: phonenumber });
-    if (userExists) {
-      throw new Error('User Exist');
-    }
-    const userCreated = await User.create({ fullname, username, email,password, phonenumber, gender, profession });
-    res.json({
-      _id: userCreated._id,
-      fullname: userCreated.fullname,
-      username: userCreated.username,
-      email: userCreated.email,
-      password: userCreated.password,
-      phonenumber: userCreated.phonenumber,
-      gender: userCreated.gender,
-      profession: userCreated.profession,
-     
-      token: generateToken(userCreated._id),
-    });
+    
+    //ds=estruct ibjet 
+    const { fullname, username, email, password,phone, gender, profession } = req.body;
     console.log("data here");
+
+     //get user by email
+    const userExists = await User.findOne({ email: email });
+
+    //check if the user email is  already registered
+    if (userExists) {
+      throw new Error('User Exist');
+    }
+
+    //get user by username
+    const usernameExists = await User.findOne({ username: username });
+
+    //if username is  already Exist then throw an error user exist 
+    if (userExists) {
+      throw new Error('User Exist');
+    }
+
+    let userCreated = null;
+    
+    try {
+     //create user 
+      var usercreatetest = await User.create({ fullname, username, email,password, phone, gender, profession });
+      userCreated= usercreatetest;
+    } catch (error) {
+      debugger;
+      throw new Error('User Creation error');
+    }
+   
+    //return empty response with status code 200
+    res.json("singup successfuly");
   })
 );
 
@@ -55,7 +65,7 @@ usersRoute.post(
         _id: user._id,
         fullnam: user.fullname,
         username: user.username,
-        phonenumber: user.phonenumber,
+        phone: user.phone,
         email: user.email,
         gender: user.gender,
         profession: user.profession,
@@ -68,6 +78,8 @@ usersRoute.post(
     }
   })
 );
+
+//this error come from every signup and login api
 
 //update user
 usersRoute.put(

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User=require('./User');
 
 const BookSchema = new mongoose.Schema(
   {
@@ -22,6 +23,19 @@ const BookSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+      bookimage:{
+        type:String,
+        
+      },
+      startreading:{
+        type:Boolean,
+
+      },
+        createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   {
     timestamps: true,
