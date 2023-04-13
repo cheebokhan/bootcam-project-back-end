@@ -29,7 +29,6 @@ BookRouter.get(
 BookRouter.post(
   '/',
   expressAsyncHandler(async (req, res) => {
-    debugger;
     const book = await Book.create(req.body);
 
     if (book) {
@@ -43,7 +42,6 @@ BookRouter.post(
 );
 
 BookRouter.post('/addtoshelf',expressAsyncHandler(async (req, res) => {
-// debugger;
   let bookshelf = await BookShelf.findOne({bookid: req.body._id ,userid: req.body.userid} );
   const {startreading,_id,userid} = req.body;
   
@@ -57,12 +55,18 @@ BookRouter.post('/addtoshelf',expressAsyncHandler(async (req, res) => {
     res.status(200);
     res.json(bookshelf);
 })
+);
+BookRouter.get('/userbookshelf:id',expressAsyncHandler(async (req, res) => {
+
+
+
+})
 )
+
 
 //get book by id for updating 
 BookRouter.put(
   '/:id',
-  authMiddleware,
   expressAsyncHandler(async (req, res) => {
     const book = await Book.findById(req.params.id);
 
