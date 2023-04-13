@@ -29,8 +29,11 @@ BookRouter.get(
 BookRouter.post(
   '/',
   expressAsyncHandler(async (req, res) => {
+
+    //this can create a book if book data is available
     const book = await Book.create(req.body);
 
+//check if book data is available then send book as a response 
     if (book) {
       res.status(200);
       res.json(book);
@@ -41,9 +44,25 @@ BookRouter.post(
   })
 );
 
+
+//this route is about for data book in bookshelf 
+
 BookRouter.post('/addtoshelf',expressAsyncHandler(async (req, res) => {
+
+
+  //get userid and bookid from req.body means from body  and check if its available then save it in bookshelf 
+
+  //means it is already in reading state 
+
   let bookshelf = await BookShelf.findOne({bookid: req.body._id ,userid: req.body.userid} );
+
+
+  //destructure body and get startreading and bookid and userid from body 
   const {startreading,_id,userid} = req.body;
+  
+
+  //if bookshelf is empty means if book is not already in reading state then change its state to reading state
+  // then create bookshelf  else if book is already in reading state then remove it from reading state
   
     if(startreading)
     bookshelf=  await BookShelf.create({bookid:_id,userid:userid});
