@@ -108,6 +108,26 @@ usersRoute.put(
   })
 );
 
+usersRoute.get(
+  '/:id',
+  expressAsyncHandler(async (req, res) => {
+    
+    // const token = localStorage.getItem('token');
+   
+    //Find the login user by ID
+    const user = await User.findById(req.params.id);
+
+    res.json({
+      username:user.username ,
+      email:user.email ,
+        password:user.password 
+      })
+
+
+    })
+);
+
+
 //Delete user
 usersRoute.delete('/:id', (req, res) => {
   res.send('Delete route');
@@ -116,12 +136,12 @@ usersRoute.delete('/:id', (req, res) => {
 //fetch Users
 usersRoute.get(
   '/',
-  authMiddleware,
   expressAsyncHandler(async (req, res) => {
     const users = await User.find({});
 
     if (users) {
-      res.status(200).json(users);
+      res.status(200);
+      res.json(users);
     } else {
       res.status(500);
 
