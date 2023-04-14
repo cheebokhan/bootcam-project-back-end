@@ -52,6 +52,7 @@ usersRoute.post(
 usersRoute.post(
   '/login',
   asynHandler(async (req, res) => {
+
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -84,8 +85,8 @@ usersRoute.post(
 //update user
 usersRoute.put(
   '/update',
-  authMiddleware,
   expressAsyncHandler(async (req, res) => {
+    
     //Find the login user by ID
     const user = await User.findById(req.user._id);
 
@@ -111,7 +112,7 @@ usersRoute.put(
 usersRoute.get(
   '/:id',
   expressAsyncHandler(async (req, res) => {
-    
+
     // const token = localStorage.getItem('token');
    
     //Find the login user by ID

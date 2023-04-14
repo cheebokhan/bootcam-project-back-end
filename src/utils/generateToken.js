@@ -13,4 +13,3 @@ const generateToken = userId => {
 
 module.exports = generateToken;
 
-//can you debug login? yes vo atha hay apnay route pay data adding kay time pir error datha ha
