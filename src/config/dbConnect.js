@@ -14,5 +14,3 @@ try {
 
 module.exports=ConnectDb
 
-
-//from wehre you are throwing this secretOrPrivateKey must have a value?
